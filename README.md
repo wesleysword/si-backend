@@ -1,98 +1,91 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Soluções Imobiliárias - API (Backend)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este repositório contém a API RESTful desenvolvida em NestJS para o sistema de gestão de leads da Soluções Imobiliárias. O backend atua como o motor principal da aplicação, responsável por gerenciar a autenticação segura de usuários (corretores/admins), a persistência dos dados dos clientes (leads) e, futuramente, orquestrar a comunicação com o microsserviço de Inteligência Artificial.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Tecnologias Utilizadas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* **Framework:** [NestJS](https://nestjs.com/) (Node.js)
+* **Linguagem:** TypeScript
+* **Banco de Dados:** PostgreSQL
+* **ORM:** Prisma (v5)
+* **Segurança:** Autenticação via JWT (@nestjs/jwt) e criptografia de senhas com Bcrypt
+* **Infraestrutura:** Docker e Docker Compose (para o banco de dados local)
 
-## Project setup
+---
 
+## Pré-requisitos e Dependências
+
+Para executar este projeto localmente, você precisará ter instalado em sua máquina:
+
+* [Node.js](https://nodejs.org/en/) (Versão 18 ou superior)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop) (Em execução)
+* [Git](https://git-scm.com/)
+
+---
+
+## Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto e adicione a seguinte variável para a conexão com o banco de dados. (Os dados abaixo são para o ambiente de desenvolvimento local via Docker):
+
+```env
+DATABASE_URL="postgresql://admin:admin_password@localhost:5432/si_database?schema=public"
+```
+## Passo a Passo para Execução Local
+Siga as instruções abaixo para rodar o projeto em sua máquina:
+
+1. Clone o repositório:
 ```bash
-$ npm install
+git clone https://github.com/SEU_USUARIO/si-backend.git
+cd si-backend
 ```
 
-## Compile and run the project
-
+2. Instale as dependências:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
-
+3. Suba o banco de dados com Docker:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker-compose up -d
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+4. Execute as migrations do Prisma (Criação das tabelas):
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npx prisma migrate dev --name init_database
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+5. Inicie o servidor de desenvolvimento:
+```bash
+npm run start:dev
+```
 
-## Resources
+O servidor estará rodando em: http://localhost:3000.
 
-Check out a few resources that may come in handy when working with NestJS:
+## Documentação da API (Endpoints)
+Autenticação e Usuários
+Todas as senhas são armazenadas com hash (Bcrypt). O login retorna um access_token (JWT) válido por 1 dia.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+POST /users/register - Cria um novo usuário.
 
-## Support
+Body: { "name": "Admin", "email": "admin@si.com", "password": "123" }
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+POST /auth/login - Autentica o usuário e gera o token JWT.
 
-## Stay in touch
+Body: { "email": "admin@si.com", "password": "123" }
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Leads (Clientes) - 🔒 Rotas Protegidas
+Requerem o envio do cabeçalho Authorization: Bearer <SEU_TOKEN_JWT>
 
-## License
+POST /leads - Cadastra um novo lead (O status inicial é "Novo").
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Body: { "name": "João Silva", "contact": "joao@email.com" }
+
+GET /leads - Lista todos os leads cadastrados.
+
+PATCH /leads/:id - Atualiza os dados ou o status de um lead (usado no Kanban).
+
+Body: { "status": "Em Atendimento" }
+
+DELETE /leads/:id - Remove um lead do banco de dados.

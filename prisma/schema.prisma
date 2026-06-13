@@ -18,10 +18,11 @@ model User {
 
 // Tabela para gerenciar os Clientes (Leads) que aparecerão no Kanban
 model Lead {
-  id        String   @id @default(uuid())
-  name      String
-  contact   String
-  status    String   @default("Novo") // Ex: Novo, Em Atendimento, Proposta, Fechado
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  contact     String
+  status      String   @default("Novo")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
